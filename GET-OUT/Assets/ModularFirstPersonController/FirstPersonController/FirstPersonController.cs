@@ -18,6 +18,10 @@ public class FirstPersonController : MonoBehaviour
 {
     private Rigidbody rb;
 
+    // esta es la referencia al player
+
+    public static FirstPersonController Instance { get; private set; }
+
     #region Camera Movement Variables
 
     public Camera playerCamera;
@@ -136,6 +140,8 @@ public class FirstPersonController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         crosshairObject = GetComponentInChildren<Image>();
+
+        Instance = this;
 
         // Set internal variables
         playerCamera.fieldOfView = fov;
@@ -437,10 +443,12 @@ public class FirstPersonController : MonoBehaviour
                 rb.AddForce(velocityChange, ForceMode.VelocityChange);
             }
         }
-
+        
         #endregion
     }
-
+    public bool IsWalking(){
+        return isWalking;
+    }
     // Sets isGrounded based on a raycast sent straigth down from the player object
     private void CheckGround()
     {
