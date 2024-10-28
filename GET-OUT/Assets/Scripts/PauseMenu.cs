@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Video; // Make sure to include this namespace
+using UnityEngine.Video; 
 
 public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
 
     public GameObject pauseMenuUI;
-    private FirstPersonController firstPersonController; // Reference to the player movement script
-    private VideoPlayer videoPlayer; // Reference to the VideoPlayer component
+    private FirstPersonController firstPersonController; 
+    private VideoPlayer videoPlayer; 
 
     void Start()
     {
-        // Find the FirstPersonController component in the Player object
-        GameObject player = GameObject.FindWithTag("Player"); // Ensure your Player has the "Player" tag
+       
+        GameObject player = GameObject.FindWithTag("Player"); // 
         if (player != null)
         {
             firstPersonController = player.GetComponentInChildren<FirstPersonController>();
@@ -56,17 +56,17 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
-        // Hide the cursor and lock it to the center
+        
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        // Re-enable the player movement
+    
         if (firstPersonController != null)
         {
             firstPersonController.enabled = true;
         }
 
-        // Resume the video playback
+     
         if (videoPlayer != null)
         {
             videoPlayer.Play();
@@ -78,27 +78,27 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
-        // Show the cursor and unlock it
+    
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
-        // Disable the player movement
+        
         if (firstPersonController != null)
         {
             firstPersonController.enabled = false;
         }
 
-        // Pause the video playback
+       
         if (videoPlayer != null)
         {
             videoPlayer.Pause();
         }
     }
 
-    private void LoadMenu()
+    public void LoadMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("title");
+        SceneManager.LoadScene("MainMenu");
     }
 
     private void QuitGame()
