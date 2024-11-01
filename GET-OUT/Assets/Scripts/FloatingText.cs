@@ -17,6 +17,8 @@ public class FloatingText : MonoBehaviour
         mainCamera = Camera.main.transform;
     }
     private void Update() {
+
+
         if (allowRotation) {
             Billboarding();
         }

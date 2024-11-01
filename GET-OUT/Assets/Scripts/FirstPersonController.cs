@@ -31,10 +31,12 @@ public class FirstPersonController : MonoBehaviour
 
 
     // Crosshair
+    public float interactRange;
     public bool lockCursor = true;
     public bool crosshair = true;
     public Sprite crosshairImage;
     public Color crosshairColor = Color.white;
+    public Color crosshairColorInteract = Color.green;
 
     // Internal Variables
     private float yaw = 0.0f;
@@ -116,9 +118,20 @@ public class FirstPersonController : MonoBehaviour
 
     #endregion
 
+    #region Dialogue Variables
+    public Transform targetToLook;
+    private bool shouldRotate = false;
+    public float rotationSpeed = 1;
+    public LayerMask interactive;
+    #endregion
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
+        interactive = LayerMask.GetMask("NPC");
+
+        interactRange = 3;
 
         crosshairObject = GetComponentInChildren<Image>();
 
@@ -191,8 +204,17 @@ public class FirstPersonController : MonoBehaviour
     {
         #region Camera
 
+        if (DialogueManager.GetInstance() != null && DialogueManager.GetInstance().isDialoguePlaying)
+        {
+            if (shouldRotate && targetToLook != null)
+            {
+                LookAt();
+            }
+            return;
+        }
+
         // Control camera movement
-        if(playerConfig.cameraCanMove)
+        if (playerConfig.cameraCanMove)
         {
             yaw = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * playerConfig.mouseSensitivity;
 
@@ -352,8 +374,23 @@ public class FirstPersonController : MonoBehaviour
     }
 
     void FixedUpdate()
+
     {
         #region Movement
+
+        if (DialogueManager.GetInstance() != null && DialogueManager.GetInstance().isDialoguePlaying)
+        {
+            return;
+        }
+
+        if (InRangeToInteract())
+        {
+            crosshairObject.color = crosshairColorInteract;
+        }
+        else
+        {
+            crosshairObject.color = crosshairColor; //esto no es del movement pero ya fue
+        }
 
         if (playerConfig.playerCanMove)
         {
@@ -427,6 +464,39 @@ public class FirstPersonController : MonoBehaviour
         
         #endregion
     }
+
+    public void LookAt()
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(targetToLook.position - playerCamera.transform.position);
+
+        playerCamera.transform.rotation = Quaternion.Lerp(playerCamera.transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+
+        if (Quaternion.Angle(playerCamera.transform.rotation, targetRotation) < 1f)
+        {
+            shouldRotate = false;
+            targetToLook = null;
+        }
+    }
+
+    private bool InRangeToInteract()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, interactRange, interactive))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void StartRotation(Transform newTarget)
+    {
+        targetToLook = newTarget;
+        shouldRotate = true;
+    }
+
     public bool IsWalking(){
         return isWalking;
     }
