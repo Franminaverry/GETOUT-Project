@@ -60,6 +60,7 @@ public class FirstPersonController : MonoBehaviour
 
     // Internal Variables
     private bool isWalking = false;
+    private float walkSpeed = 2.5f;
 
     #region Sprint
 
@@ -139,6 +140,7 @@ public class FirstPersonController : MonoBehaviour
 
         // Set internal variables
         playerCamera.fieldOfView = playerConfig.fov;
+        walkSpeed = playerConfig.walkSpeed;
         originalScale = transform.localScale;
         jointOriginalPos = joint.localPosition;
 
@@ -449,7 +451,7 @@ public class FirstPersonController : MonoBehaviour
                     sprintBarCG.alpha -= 3 * Time.deltaTime;
                 }
 
-                targetVelocity = transform.TransformDirection(targetVelocity) * playerConfig.walkSpeed;
+                targetVelocity = transform.TransformDirection(targetVelocity) * walkSpeed;
 
                 // Apply a force that attempts to reach our target velocity
                 Vector3 velocity = rb.velocity;
@@ -541,7 +543,7 @@ public class FirstPersonController : MonoBehaviour
         if(isCrouched)
         {
             transform.localScale = new Vector3(originalScale.x, originalScale.y, originalScale.z);
-            playerConfig.walkSpeed /= playerConfig.speedReduction;
+            walkSpeed = playerConfig.walkSpeed;
 
             isCrouched = false;
         }
@@ -550,8 +552,8 @@ public class FirstPersonController : MonoBehaviour
         else
         {
             transform.localScale = new Vector3(originalScale.x, playerConfig.crouchHeight, originalScale.z);
-            playerConfig.walkSpeed *= playerConfig.speedReduction;
 
+            walkSpeed = playerConfig.walkSpeed * playerConfig.speedReduction;
             isCrouched = true;
         }
     }
