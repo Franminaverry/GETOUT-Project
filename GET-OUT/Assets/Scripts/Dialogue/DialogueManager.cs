@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class DialogueManager : MonoBehaviour
 {
     [Header("Dialogue UI")]
-    [SerializeField] private GameObject dialoguePanel;
+    [SerializeField] private CanvasGroup dialoguePanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
 
     [Header("Choices UI")]
@@ -36,7 +36,9 @@ public class DialogueManager : MonoBehaviour
     private void Start()
     {
         isDialoguePlaying = false;
-        dialoguePanel.SetActive(false);
+        dialoguePanel.alpha = 0;
+        dialoguePanel.blocksRaycasts = false;
+        dialoguePanel.interactable = false;
         choicesText = new TextMeshProUGUI[choices.Length];
         int index = 0;
         foreach (GameObject choice in choices)
@@ -54,11 +56,19 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        isDialoguePlaying=false;
+        instance = null;
+    }
+
     public void EnterDialogueMode(TextAsset inkJSON)
     {
         currentStory = new Story(inkJSON.text);
         isDialoguePlaying = true;
-        dialoguePanel.SetActive(true);
+        dialoguePanel.alpha = 1;
+        dialoguePanel.blocksRaycasts = true;
+        dialoguePanel.interactable = true;
         Cursor.visible = true; // Show the cursor
         Cursor.lockState = CursorLockMode.None; // Unlock the cursor
         ContinueStory();
@@ -69,7 +79,9 @@ public class DialogueManager : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
 
         isDialoguePlaying = false;
-        dialoguePanel.SetActive(false);
+        dialoguePanel.alpha = 0;
+        dialoguePanel.blocksRaycasts = false;
+        dialoguePanel.interactable = false;
         dialogueText.text = "";
         Cursor.visible = false; // Hide the cursor
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor

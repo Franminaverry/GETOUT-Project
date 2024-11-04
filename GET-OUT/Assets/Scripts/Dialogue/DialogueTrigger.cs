@@ -23,14 +23,14 @@ public class DialogueTrigger : MonoBehaviour
 
     private void Update()
     {
-        if (playerInRange && !DialogueManager.GetInstance().isDialoguePlaying && !hasAlreadyTalked)
-        {
-            hasAlreadyTalked = true;
-            DialogueManager.GetInstance().EnterDialogueMode(firstConvo);
-        }
-        else if (Input.GetKeyUp(KeyCode.E ) && playerInRange && !DialogueManager.GetInstance().isDialoguePlaying && hasAlreadyTalked)
+        
+        if (Input.GetKeyUp(KeyCode.E) && playerInRange && !DialogueManager.GetInstance().isDialoguePlaying && hasAlreadyTalked)
         {
             DialogueManager.GetInstance().EnterDialogueMode(interactConvo);
+        }
+        else if (playerInRange && DialogueManager.GetInstance().isDialoguePlaying && hasAlreadyTalked)
+        {
+            Debug.Log("imalreadytalking");
         }
     }
 
@@ -40,11 +40,15 @@ public class DialogueTrigger : MonoBehaviour
         {
             var player = other.gameObject.GetComponent<FirstPersonController>();
             playerInRange = true;
-            
-            if (!hasAlreadyTalked)
+
+            if (playerInRange && !DialogueManager.GetInstance().isDialoguePlaying && !hasAlreadyTalked)
             {
+                hasAlreadyTalked = true;
+                DialogueManager.GetInstance().EnterDialogueMode(firstConvo);
+
                 player.StartRotation(lookat);
             }
+
         }
     }
 
