@@ -9,16 +9,16 @@ public class Flashlight : MonoBehaviour
     public AudioSource turnOn;
     public AudioSource turnOff;
 
-    public bool on;
-    public bool off;
+    private bool on;
+    private bool off;
 
 
 
 
     void Start()
     {
-        off = true;
-        flashlight.SetActive(false);
+        on = true;
+        flashlight.SetActive(true);
     }
 
 
@@ -31,7 +31,7 @@ public class Flashlight : MonoBehaviour
             flashlight.SetActive(true);
             turnOn.Play();
             off = false;
-            on = true;
+            on = true;           
         }
         else if (on && Input.GetKeyDown(KeyCode.F))
         {

@@ -17,7 +17,7 @@ A mi tambien me gustan mucho :))
     
 == pista ==
 Bueno, que buscas mostro?
- * La llave para abrir la puerta esa del ogt
+ * La llave para abrir la puerta esa re loca
     -> puerta
  * el sentido de mi existencia 
     -> quedecis2
@@ -28,7 +28,7 @@ A mira vos, a mi me importa un carajo igual, mrt no hagas los grupos de tesis ra
     -> quedecis3 
  * Milo aca hubiese puesto un mejor dialogo
     -> quedecis3
- * y aca te tiro una opcion 3 para que veas que se puede kj
+ * los globos flotan porque la densidad del helio es mucho menor que la...
     -> quedecis3
     
 == quedecis3 ==
